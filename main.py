@@ -9,4 +9,5 @@ if __name__ == "__main__":
     f.plot_densite_elec()
     f.plot_densite_elec_SEP()
     f.plot_densite_elec_SEP_precis()
+    f.repre_dens_soleil()
     

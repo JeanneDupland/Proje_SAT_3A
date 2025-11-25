@@ -3,6 +3,10 @@ import numpy as np
 import constantes as c
 import matplotlib.pyplot as plt
 import scipy.stats as stats
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import LogNorm
+
+
 
 def distance_terre_venus(angle_terre, angle_venus):
     """
@@ -106,9 +110,12 @@ def plot_densite_elec_SEP_precis():
 
 def repre_dens_soleil():
     """
-    Représente la densité électronique autour du Soleil.
-    Le soleil est représenté au centre et la densité est représentée grâce à un gradient de couleurs.
+    Représente la densité électronique autour du Soleil avec une colormap rouge -> jaune clair.
     """
+    # --- Création de la colormap personnalisée ---
+    couleurs = ["#400000", "#800000", "#CC0000", "#FF5500", "#FFAA00", "#FFE066", "#FFFFCC"]
+    cmap_custom = LinearSegmentedColormap.from_list("rouge_jaune", couleurs)
+
     r = np.linspace(c.R_soleil, 20 * c.R_soleil, 400)
     theta = np.linspace(0, 2 * np.pi, 400)
     R, Theta = np.meshgrid(r, theta)
@@ -118,7 +125,7 @@ def repre_dens_soleil():
     Y = R * np.sin(Theta)
 
     plt.figure(figsize=(8, 8))
-    plt.pcolormesh(X, Y, Z, shading='auto', norm=stats.lognorm(), cmap='inferno')
+    plt.pcolormesh(X, Y, Z, shading='auto', norm=LogNorm(), cmap=cmap_custom)
     plt.colorbar(label='Densité électronique (cm⁻³)')
     plt.title("Densité électronique autour du Soleil")
     plt.xlabel("X (km)")
