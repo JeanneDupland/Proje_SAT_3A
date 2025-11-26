@@ -2,7 +2,7 @@
 import numpy as np
 import constantes as c
 import matplotlib.pyplot as plt
-import scipy.stats as stats
+import scipy.integrate as int
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.colors import LogNorm
 
@@ -131,4 +131,42 @@ def repre_dens_soleil():
     plt.xlabel("X (km)")
     plt.ylabel("Y (km)")
     plt.axis('equal')
+    plt.show()
+
+def S2D_vonKarman(kx, kz):
+    k_perp2 = kx**2 + kz**2
+    return 0.055 * c.Cn2 * (k_perp2 + c.Kos**2)**(-4/3)
+
+def F_filter(ky, kz, xR):
+    k_perp = (ky**2 + kz**2)
+    integrand = lambda u: 1 - np.cos(xR*u*(k_perp * (1 - u)) / c.k0**2)
+    val, _ = int.quad(integrand, 0.0, 1.0)
+    return 0.5 * val
+
+def sigma_log_amplitude_2D(xR):
+    """
+    Variance de log-amplitude pour une propagation sur la distance xR
+    en utilisant le spectre 2D de von Karman.
+    """
+    def integrand(kz):
+        return S2D_vonKarman(0.0, kz) * F_filter(0.0, kz, xR)
+
+    val, _ = int.quad(integrand, -np.inf, np.inf)
+    prefactor = 2 * np.pi * c.k0**2 * xR
+
+    return prefactor * val
+
+def plot_sigma_log_amplitude_2D():
+    """
+    Trace la variance de log-amplitude en fonction de la distance de propagation xR.
+    """
+    xR_values = np.linspace(0, 40e3, 100) 
+    sigma_values = [sigma_log_amplitude_2D(xR) for xR in xR_values]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(xR_values*10**(-3), sigma_values)
+    plt.title("Variance de log-amplitude en fonction de la distance de propagation")
+    plt.xlabel("Distance de propagation xR (m)")
+    plt.ylabel("Variance de log-amplitude σ²")
+    plt.grid()
     plt.show()
