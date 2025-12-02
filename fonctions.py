@@ -70,7 +70,7 @@ def plot_densite_elec():
     plt.yscale('log')
     plt.title("Densité électronique en fonction de la distance au centre du Soleil")
     plt.xlabel("Distance (rayons solaires)")
-    plt.ylabel("Densité électronique (cm⁻³)")
+    plt.ylabel("Densité électronique (m⁻³)")
     plt.grid()
     plt.show()
 
@@ -87,7 +87,7 @@ def plot_densite_elec_SEP():
     plt.yscale('log')
     plt.title("Densité électronique en fonction de l'angle soleil-terre-sonde (SEP)")
     plt.xlabel("Angle SEP (Degré)")
-    plt.ylabel("Densité électronique (cm⁻³)")
+    plt.ylabel("Densité électronique (m⁻³)")
     plt.grid()
     plt.show()
 
@@ -104,7 +104,7 @@ def plot_densite_elec_SEP_precis():
     plt.yscale('log')
     plt.title("Densité électronique en fonction de l'angle soleil-terre-sonde (SEP)")
     plt.xlabel("Angle SEP (Degré)")
-    plt.ylabel("Densité électronique (cm⁻³)")
+    plt.ylabel("Densité électronique (m⁻³)")
     plt.grid()
     plt.show()
 
@@ -126,7 +126,7 @@ def repre_dens_soleil():
 
     plt.figure(figsize=(8, 8))
     plt.pcolormesh(X, Y, Z, shading='auto', norm=LogNorm(), cmap=cmap_custom)
-    plt.colorbar(label='Densité électronique (cm⁻³)')
+    plt.colorbar(label='Densité électronique (m⁻³)')
     plt.title("Densité électronique autour du Soleil")
     plt.xlabel("X (km)")
     plt.ylabel("Y (km)")
@@ -178,3 +178,35 @@ def link_budget(P_rx, B, T):
     N = 10*np.log10(c.kb * T * B)
     SNR = P_rx - N
     return SNR
+
+def plot_link_budget(B, T):
+    """
+    Trace le bilan de liaison SNR en fonction de la puissance reçue.
+    """
+    P_rx_dBm = np.linspace(-150, 0, 1000)  # Puissance reçue en dBm
+    SNR_values = [link_budget(P, B, T) for P in P_rx_dBm]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(P_rx_dBm, SNR_values)
+    plt.title("Bilan de liaison SNR en fonction de la puissance reçue")
+    plt.xlabel("Puissance reçue P_rx (dBm)")
+    plt.ylabel("SNR (dB)")
+    plt.grid()
+    plt.show()
+
+def delta_epsilon(r):
+    """
+    Variation de permittivité : Δε = - re * λ² * δN
+    """
+    re = 2.818e-15       # rayon classique de l'électron (m)
+    N = densite_elec(r) * 1e6  # conversion de cm⁻³ à m⁻³
+    deltaN = N - np.mean(N)
+    return - re * c.lamb**2 * deltaN
+
+def delta_theta(L):
+    """
+    Variation de l'angle de phase.
+    """
+    val, _ = int.quad(lambda r: delta_epsilon(r), 0, L)
+    phi = c.k0/2 * val
+    return phi
