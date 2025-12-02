@@ -15,3 +15,5 @@ k0  = 2*np.pi/lamb
 # dérivés
 Kos = 2*np.pi / Los
 km  = 5.92 / Lis
+
+kb = 1.38e-23  # constante de Boltzmann en J/K

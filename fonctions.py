@@ -62,7 +62,7 @@ def plot_densite_elec():
     """
     Trace la densité électronique en fonction de la distance au centre du Soleil.
     """
-    r = np.linspace(c.R_soleil, 20 * c.R_soleil, 1000)  # De la surface du Soleil à 20 rayons solaires
+    r = np.linspace(c.R_soleil, 4 * c.R_soleil, 1000)  # De la surface du Soleil à 20 rayons solaires
     densites = densite_elec(r)
     
     plt.figure(figsize=(10, 6))
@@ -78,7 +78,7 @@ def plot_densite_elec_SEP():
     """
     Trace la densité électronique en fonction de la distance au centre du Soleil.
     """
-    SEP = np.linspace(0.01, 90, 1000)  
+    SEP = np.linspace(0.01, 30, 1000)  
     r = SEP_dist(SEP)
     densites = densite_elec(r)
     
@@ -116,7 +116,7 @@ def repre_dens_soleil():
     couleurs = ["#400000", "#800000", "#CC0000", "#FF5500", "#FFAA00", "#FFE066", "#FFFFCC"]
     cmap_custom = LinearSegmentedColormap.from_list("rouge_jaune", couleurs)
 
-    r = np.linspace(c.R_soleil, 20 * c.R_soleil, 400)
+    r = np.linspace(c.R_soleil, 4 * c.R_soleil, 400)
     theta = np.linspace(0, 2 * np.pi, 400)
     R, Theta = np.meshgrid(r, theta)
     Z = densite_elec(R)
@@ -160,7 +160,7 @@ def plot_sigma_log_amplitude_2D():
     """
     Trace la variance de log-amplitude en fonction de la distance de propagation xR.
     """
-    xR_values = np.linspace(0, 40e3, 100) 
+    xR_values = np.linspace(0, 40e3, 1000) 
     sigma_values = [sigma_log_amplitude_2D(xR) for xR in xR_values]
 
     plt.figure(figsize=(10, 6))
@@ -170,3 +170,11 @@ def plot_sigma_log_amplitude_2D():
     plt.ylabel("Variance de log-amplitude σ²")
     plt.grid()
     plt.show()
+
+def link_budget(P_rx, B, T):
+    """
+    Calcule le bilan de liaison SNR.
+    """
+    N = 10*np.log10(c.kb * T * B)
+    SNR = P_rx - N
+    return SNR
