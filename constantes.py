@@ -1,8 +1,8 @@
 import numpy as np
 
-D_venus = 108.2e9  # Distance moyenne de Vénus au Soleil en km
-D_terre = 149.6e9  # Distance moyenne de la Terre au Soleil en km
-R_soleil = 696340  # Rayon du Soleil en km
+D_venus = 108.2e9  # Distance moyenne de Vénus au Soleil en m
+D_terre = 149.6e9  # Distance moyenne de la Terre au Soleil en m
+R_soleil = 696340e3  # Rayon du Soleil en m
 
 Cn2 = 1e-12        # structure constant Cn²
 Los = 100          # outer scale (m)
