@@ -119,18 +119,3 @@ def angular_variance(SEP):
     valI3 = I3()
     return 0.5 * c.re**2 * c.lamb**4 * c.Q_nu * c.kappa_0**(c.nu-3) * valI1 * valI2 * valI3
 
-def plot_angular_variance():
-    """
-    Trace la variance angulaire en fonction de l'angle SEP.
-    """
-    SEP_values = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
-    variance_values = [angular_variance(SEP) for SEP in SEP_values]
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(SEP_values, variance_values)
-    plt.title("Variance angulaire en fonction de l'angle SEP")
-    plt.xlabel("Angle SEP (degrés)")
-    plt.ylabel("Variance angulaire (radians²)")
-    plt.yscale('log')
-    plt.grid()
-    plt.show()
