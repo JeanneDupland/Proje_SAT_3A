@@ -262,8 +262,9 @@ def I2 (SEP):
     """
     Calcul de l'intégrale I2 pour la variance angulaire.
     """
-    # 2 * c.a0**2 / (c.D_terre * np.sin(np.radians(SEP)))**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
-    return 1e-18 / np.sin(np.radians(SEP))**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
+    # 1e-18 / np.sin(np.radians(SEP))**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
+    print(2*c.a0**2/c.D_terre**11)
+    return 2 * c.a0**2 / (c.D_terre * np.sin(np.radians(SEP)))**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
 
 def plot_I2():
     """
@@ -277,6 +278,7 @@ def plot_I2():
     plt.title("Intégrale I2 en fonction de l'angle SEP")
     plt.xlabel("Angle SEP (degrés)")
     plt.ylabel("Intégrale I2")
+    plt.yscale('log')
     plt.grid()
     plt.show()
 
