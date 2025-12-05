@@ -62,7 +62,7 @@ def sigma_log_amplitude_2D(xR):
     val, _ = int.quad(integrand, -np.inf, np.inf)
     prefactor = 2 * np.pi * c.k0**2 * xR
 
-    return prefactor * val
+    return prefactor * val * 1000
 
 def link_budget(P_rx, B, T):
     """
@@ -98,10 +98,11 @@ def I2 (SEP):
     """
     Calcul de l'intégrale I2 pour la variance angulaire.
     """
-    # 1e-18 / np.sin(np.radians(SEP))**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
-    print(2*c.a0**2/c.D_terre**11)
-    return 2 * c.a0**2 / (c.D_terre * np.sin(np.radians(SEP)))**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
-
+    SEP = np.radians(SEP)
+    return 1e-18 / np.sin(SEP)**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 \
+                                      + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 \
+                                        + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
+    
 def I3 ():
     """
     Calcul de l'intégrale I3 pour la variance angulaire.
