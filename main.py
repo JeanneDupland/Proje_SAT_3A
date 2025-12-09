@@ -11,7 +11,9 @@ if __name__ == "__main__":
     #fp.repre_dens_soleil()
     #fp.plot_sigma_log_amplitude_2D()
     #fp.plot_I1()
-    fp.plot_I2()
-
+    #fp.plot_I2()
+    #fp.plot_I3()
+    #fp.plot_angular_variance()
+    fp.plot_RMS()
     
     

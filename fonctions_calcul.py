@@ -103,11 +103,11 @@ def I2 (SEP):
                                       + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 \
                                         + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
     
-def I3 ():
+def I3 (Vs, r):
     """
     Calcul de l'intégrale I3 pour la variance angulaire.
     """
-    gam_rad = np.radians(c.gam)
+    gam_rad = np.arctan(-Vs/(c.omega*r))
     return np.pi/2 * (2 + (c.Axial_r**2 - 1) * np.sin(gam_rad)**2)/(1 + (c.Axial_r**2 -1) * np.sin(gam_rad)**2)**(2/3)
 
 
@@ -115,8 +115,9 @@ def angular_variance(SEP):
     """
     Variance angulaire due aux fluctuations de densité électronique.
     """
-    valI1 = I1()
+    valI1 = I1(3.9, c.ar)
     valI2 = I2(SEP)
-    valI3 = I3()
+    r = SEP_dist(SEP)
+    valI3 = I3(200e3, r)
     return 0.5 * c.re**2 * c.lamb**4 * c.Q_nu * c.kappa_0**(c.nu-3) * valI1 * valI2 * valI3
 

@@ -186,6 +186,31 @@ def plot_I2():
     plt.yscale('log')
     plt.grid()
     plt.show()
+
+def plot_I3():
+    """
+    Trace de l'intégrale I3 en fonction de la distance r.
+    """
+    r = np.linspace(c.R_soleil, 4 * c.R_soleil, 1000)  # De la surface du Soleil à 4 rayons solaires
+    Vs = [100e3, 150e3, 200e3, 250e3, 300e3]  # Vitesse radiale en m/s
+    I3_values_0 = [fc.I3(Vs[0], radius) for radius in r]
+    I3_values_1 = [fc.I3(Vs[1], radius) for radius in r]
+    I3_values_2 = [fc.I3(Vs[2], radius) for radius in r]
+    I3_values_3 = [fc.I3(Vs[3], radius) for radius in r]
+    I3_values_4 = [fc.I3(Vs[4], radius) for radius in r]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(r / c.R_soleil, I3_values_0, label=f"Vs={Vs[0]/1e3} km/s")
+    plt.plot(r / c.R_soleil, I3_values_1, label=f"Vs={Vs[1]/1e3} km/s")
+    plt.plot(r / c.R_soleil, I3_values_2, label=f"Vs={Vs[2]/1e3} km/s")
+    plt.plot(r / c.R_soleil, I3_values_3, label=f"Vs={Vs[3]/1e3} km/s")
+    plt.plot(r / c.R_soleil, I3_values_4, label=f"Vs={Vs[4]/1e3} km/s")
+    plt.legend()    
+    plt.title("Intégrale I3 en fonction de la distance r")
+    plt.xlabel("Distance r (rayons solaires)")
+    plt.ylabel("Intégrale I3")
+    plt.grid()
+    plt.show()
  
 def plot_angular_variance():
     """
@@ -215,6 +240,18 @@ def plot_angular_variance():
     plt.title("Variance angulaire en fonction de l'angle SEP")
     plt.xlabel("Angle SEP (degrés)")
     plt.ylabel("Variance angulaire (radians²)")
+    plt.yscale('log')
+    plt.grid()
+    plt.show() 
+
+def plot_RMS():
+    SEP_values = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
+    variance_values = [np.rad2deg(1.414*np.sqrt(fc.angular_variance(SEP)))*10**3 for SEP in SEP_values]
+    plt.figure(figsize=(10, 6))
+    plt.plot(SEP_values, variance_values)
+    plt.title("Angle d'arrivée RMS en fonction de l'angle SEP")
+    plt.xlabel("Angle SEP (degrés)")
+    plt.ylabel("Angle d'arrivée (mdegrés)")
     plt.yscale('log')
     plt.grid()
     plt.show() 

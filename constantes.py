@@ -21,7 +21,7 @@ epsil = 0.5
 epsil_0 = 8.854e-12  # permittivité du vide en F/m
 re = 2.818e-15      # rayon classique de l'électron (m)
 
-L0 = 2000e3  # échelle extérieure de turbulence en mètres
+L0 = 2e7  # échelle extérieure de turbulence en mètres
 kappa_0 = 2*np.pi / L0
 
 Axial_r = 35
@@ -30,3 +30,4 @@ nu = 3.9
 a0 = 8.75e74 # coefficient d'irrégularité
 ar = 35 # rayon de l'antenne
 gam = 90
+omega = 2.7*10**(-6)  # vitesse angulaire du soleil en rad/s
