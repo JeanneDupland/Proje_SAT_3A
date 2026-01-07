@@ -104,11 +104,11 @@ def plot_sigma_log_amplitude_2D():
     """
     Trace la variance de log-amplitude en fonction de la distance de propagation xR.
     """
-    xR_values = np.linspace(0, 40e3, 1000) 
+    xR_values = np.linspace(0, 40e3, 100) 
     sigma_values = [fc.sigma_log_amplitude_2D(xR) for xR in xR_values]
 
     plt.figure(figsize=(10, 6))
-    plt.plot(xR_values*10**(-3), sigma_values)
+    plt.plot(xR_values, sigma_values)
     plt.title("Variance de log-amplitude en fonction de la distance de propagation")
     plt.xlabel("Distance de propagation xR (m)")
     plt.ylabel("Variance de log-amplitude σ²")
@@ -192,7 +192,7 @@ def plot_I3():
     Trace de l'intégrale I3 en fonction de la distance r.
     """
     r = np.linspace(c.R_soleil, 4 * c.R_soleil, 1000)  # De la surface du Soleil à 4 rayons solaires
-    Vs = [100e3, 150e3, 200e3, 250e3, 300e3]  # Vitesse radiale en m/s
+    Vs = [100e3, 150e3, 200e3, 250e3, 300e3]  # Vitesse radiale en m/sc
     I3_values_0 = [fc.I3(Vs[0], radius) for radius in r]
     I3_values_1 = [fc.I3(Vs[1], radius) for radius in r]
     I3_values_2 = [fc.I3(Vs[2], radius) for radius in r]

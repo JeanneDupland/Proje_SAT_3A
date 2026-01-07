@@ -99,7 +99,7 @@ def I2 (SEP):
     Calcul de l'intégrale I2 pour la variance angulaire.
     """
     SEP = np.radians(SEP)
-    return 1e-18 / np.sin(SEP)**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 \
+    return 1*10**(-18)/np.sin(SEP)**11 * ((np.sin(SEP)**9 * np.cos(SEP))/10 + (9 * np.sin(SEP)**7 * np.cos(SEP))/80 \
                                       + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 \
                                         + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
     
