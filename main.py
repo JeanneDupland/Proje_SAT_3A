@@ -9,11 +9,12 @@ if __name__ == "__main__":
     #fp.plot_densite_elec()
     #fp.plot_densite_elec_SEP_precis()
     #fp.repre_dens_soleil()
-    fp.plot_sigma_log_amplitude_2D()
+    #fp.plot_sigma_log_amplitude_2D()
     #fp.plot_I1()
     #fp.plot_I2()
     #fp.plot_I3()
     #fp.plot_angular_variance()
-    fp.plot_RMS()
-    
-    
+    #fp.plot_RMS()
+    #fp.plot_spectre_phase()
+    #fp.plot_spectre_doppler()
+    fp.plot_serie_temporelle_doppler()

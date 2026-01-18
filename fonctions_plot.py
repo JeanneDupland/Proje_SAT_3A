@@ -105,7 +105,7 @@ def plot_sigma_log_amplitude_2D():
     Trace la variance de log-amplitude en fonction de la distance de propagation xR.
     """
     xR_values = np.linspace(0, 40e3, 100) 
-    sigma_values = [fc.sigma_log_amplitude_2D(xR) for xR in xR_values]
+    sigma_values = [75.7 * fc.sigma_log_amplitude_2D(xR) for xR in xR_values]
 
     plt.figure(figsize=(10, 6))
     plt.plot(xR_values, sigma_values)
@@ -255,3 +255,83 @@ def plot_RMS():
     plt.yscale('log')
     plt.grid()
     plt.show() 
+
+def plot_spectre_phase():
+    f = [10**(-4), 10**(-3), 10**(-2), 10**(-1), 1]  # Fréquence en Hz
+    SEP = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
+    vent_p = 100e3  # Vitesse de propagation en m/s
+    W_phi_values1 = [fc.spectre_phase(f[0], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values2 = [fc.spectre_phase(f[1], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values3 = [fc.spectre_phase(f[2], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values4 = [fc.spectre_phase(f[3], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values5 = [fc.spectre_phase(f[4], SEP_angle, vent_p) for SEP_angle in SEP]
+    plt.figure(figsize=(10, 6))
+    plt.plot(SEP, W_phi_values1, label=f"f={f[0]:.1e} Hz")
+    plt.plot(SEP, W_phi_values2, label=f"f={f[1]:.1e} Hz")
+    plt.plot(SEP, W_phi_values3, label=f"f={f[2]:.1e} Hz")
+    plt.plot(SEP, W_phi_values4, label=f"f={f[3]:.1e} Hz")
+    plt.plot(SEP, W_phi_values5, label=f"f={f[4]:.1e} Hz")
+    plt.title("Spectre de phase en fonction de l'angle SEP")
+    plt.xlabel("Angle SEP (degrés)")
+    plt.ylabel("Spectre de phase Wφ")
+    plt.yscale('log')
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+def plot_spectre_doppler():
+    f = [10**(-4), 10**(-3), 10**(-2), 10**(-1), 1]  # Fréquence en Hz
+    SEP = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
+    vent_p = 100e3  # Vitesse de propagation en m/s
+    W_phi_values1 = [fc.spectre_doppler(f[0], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values2 = [fc.spectre_doppler(f[1], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values3 = [fc.spectre_doppler(f[2], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values4 = [fc.spectre_doppler(f[3], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values5 = [fc.spectre_doppler(f[4], SEP_angle, vent_p) for SEP_angle in SEP]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(SEP, W_phi_values1, label=f"f={f[0]:.1e} Hz")
+    plt.plot(SEP, W_phi_values2, label=f"f={f[1]:.1e} Hz")
+    plt.plot(SEP, W_phi_values3, label=f"f={f[2]:.1e} Hz")
+    plt.plot(SEP, W_phi_values4, label=f"f={f[3]:.1e} Hz")
+    plt.plot(SEP, W_phi_values5, label=f"f={f[4]:.1e} Hz")
+    plt.title("Spectre Doppler en fonction de l'angle SEP")
+    plt.xlabel("Angle SEP (degrés)")
+    plt.ylabel("Spectre Doppler WfD")
+    plt.yscale('log')
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+def plot_serie_temporelle_doppler():
+    seed = 0
+    SEP_list = [0.5, 1, 2, 3, 4]
+    vent_p = 100e3
+    Cnorm = 1e-33
+    fs = 200
+    T = 200
+
+    # PSD sur une grille dense
+    f_fluct = np.logspace(-4, 1, 600)        # Hz
+    omega_pos = 2*np.pi*f_fluct              # rad/s
+
+    plt.figure(figsize=(10, 6))
+
+    for i, SEP in enumerate(SEP_list):
+        Wfd_om_pos = np.array([fc.spectre_doppler(ff, SEP, vent_p) for ff in f_fluct], float)
+        Wfd_om_pos = np.nan_to_num(Wfd_om_pos, nan=0.0, posinf=0.0, neginf=0.0)
+        Wfd_om_pos = np.maximum(Wfd_om_pos, 0.0)
+
+        t, fD = fc.serie_temp_doppler(seed+i, omega_pos, Wfd_om_pos, fs=fs, T=T)
+
+        # Affiche juste 30 s pour lisibilité
+        nwin = 30*fs
+        plt.plot(t[:nwin], Cnorm*fD[:nwin], label=f"SEP={SEP}°")
+
+    plt.title("Série temporelle Doppler $f_D(t)$ pour différents SEP")
+    plt.xlabel("Temps (s)")
+    plt.ylabel("$f_D(t)$ (Hz)")
+    plt.legend()
+    plt.grid()
+    plt.show()
+          

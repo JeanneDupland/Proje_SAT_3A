@@ -5,7 +5,7 @@ D_terre = 149.6e9  # Distance moyenne de la Terre au Soleil en m
 R_soleil = 696340e3  # Rayon du Soleil en m
 
 Cn2 = 1e-12        # structure constant Cn²
-Los = 100          # outer scale (m)
+Los = 100     # outer scale (m)
 Lis = 0.01         # inner scale (m)
 c = 3e8
 f = 10e9
@@ -31,3 +31,5 @@ a0 = 8.75e74 # coefficient d'irrégularité
 ar = 35 # rayon de l'antenne
 gam = 90
 omega = 2.7*10**(-6)  # vitesse angulaire du soleil en rad/s
+
+b = 0.4832 # facteur d'éapproximation de la fonction Airy
