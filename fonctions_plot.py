@@ -105,7 +105,7 @@ def plot_sigma_log_amplitude_2D():
     Trace la variance de log-amplitude en fonction de la distance de propagation xR.
     """
     xR_values = np.linspace(0, 40e3, 100) 
-    sigma_values = [75.7 * fc.sigma_log_amplitude_2D(xR) for xR in xR_values]
+    sigma_values = [fc.sigma_log_amplitude_2D(xR) for xR in xR_values]
 
     plt.figure(figsize=(10, 6))
     plt.plot(xR_values, sigma_values)

@@ -52,7 +52,6 @@ def F_filter(kx, kz, xR):
     val, _ = int.quad(integrand, 0.0, 1.0, limit=200)
     return 0.5 * val
 
-
 def sigma_log_amplitude_2D(xR):
     """
     Variance de log-amplitude pour une propagation sur la distance xR
@@ -61,17 +60,12 @@ def sigma_log_amplitude_2D(xR):
     def integrand(kz):
         return (
             S2D_vonKarman(0.0, kz)
-            * F_filter(0.0, kz, xR)
-            * abs(kz)          # ← ← ← LE FACTEUR MANQUANT
-        )
+            * F_filter(0.0, kz, xR))
 
     val, _ = int.quad(integrand, 0.0, np.inf, limit=500)
     prefactor = 2 * np.pi * c.k0**2 * xR
 
     return prefactor * val
-
-
-
 
 def delta_epsilon(r):
     """
