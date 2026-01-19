@@ -297,7 +297,7 @@ def plot_spectre_doppler():
     plt.plot(SEP, W_phi_values5, label=f"f={f[4]:.1e} Hz")
     plt.title("Spectre Doppler en fonction de l'angle SEP")
     plt.xlabel("Angle SEP (degrés)")
-    plt.ylabel("Spectre Doppler WfD")
+    plt.ylabel("Spectre Doppler $W_{f_D}$")
     plt.yscale('log')
     plt.legend()
     plt.grid()

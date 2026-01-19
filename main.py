@@ -16,5 +16,5 @@ if __name__ == "__main__":
     #fp.plot_angular_variance()
     #fp.plot_RMS()
     #fp.plot_spectre_phase()
-    #fp.plot_spectre_doppler()
+    fp.plot_spectre_doppler()
     fp.plot_serie_temporelle_doppler()
