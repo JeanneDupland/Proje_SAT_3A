@@ -26,10 +26,25 @@ kappa_0 = 2*np.pi / L0
 
 Axial_r = 35
 Q_nu = 2 * Axial_r/np.pi
-nu = 3.9
+nu = 3.9 #indice spectral de la turbulence
 a0 = 8.75e74 # coefficient d'irrégularité
 ar = 35 # rayon de l'antenne
 gam = 90
 omega = 2.7*10**(-6)  # vitesse angulaire du soleil en rad/s
 
 b = 0.4832 # facteur d'éapproximation de la fonction Airy
+
+# Table 2 (Ho et al., 2008) — valeurs RMS
+_TABLE2 = {
+    "SEP_deg": np.array([0.25, 0.30, 0.40, 0.50, 0.60, 0.70]),
+    "S_deg":  np.array([41.8, 15.3,  3.2,  0.9,  0.340, 0.146]),   # deg
+    "X_deg":  np.array([ 3.1,  1.1,  0.237,0.069,0.026, 0.011]),   # deg (mdeg convertis)
+    "Ka_deg": np.array([0.245,0.090,0.019,0.0054,0.0020,0.0008]),  # deg (mdeg convertis)
+}
+
+# Fréquences porteuses typiques DSN (tu peux ajuster si besoin)
+FREQ = {
+    "S": 2.3e9,    # Hz
+    "X": 8.4e9,    # Hz (ou 8.6e9 selon tes choix)
+    "Ka": 32.0e9,  # Hz
+}

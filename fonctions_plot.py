@@ -217,62 +217,60 @@ def plot_angular_variance():
     Trace la variance angulaire en fonction de l'angle SEP.
     """
     SEP_values = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
-    variance_values = [fc.angular_variance(SEP) for SEP in SEP_values]
+    variance_values1 = [fc.angular_variance_band(SEP, band='S') for SEP in SEP_values]
+    variance_values2 = [fc.angular_variance_band(SEP, band='X') for SEP in SEP_values]
+    variance_values3 = [fc.angular_variance_band(SEP, band='Ka') for SEP in SEP_values]
 
     plt.figure(figsize=(10, 6))
-    plt.plot(SEP_values, variance_values)
+    plt.plot(SEP_values, variance_values1, label="Bande S")
+    plt.plot(SEP_values, variance_values2, label="Bande X")
+    plt.plot(SEP_values, variance_values3, label="Bande Ka")
     plt.title("Variance angulaire en fonction de l'angle SEP")
     plt.xlabel("Angle SEP (degrés)")
     plt.ylabel("Variance angulaire (radians²)")
     plt.yscale('log')
+    plt.legend()
     plt.grid()
     plt.show()
 
-def plot_angular_variance():
+
+def plot_RMS():    
     """
-    Trace la variance angulaire en fonction de l'angle SEP.
+    Trace les valeurs des fluctuations RMS S, X, Ka en fonction de l'angle SEP.
     """
     SEP_values = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
-    variance_values = [fc.angular_variance(SEP) for SEP in SEP_values]
-
+    RMS_S_values = [fc.angle_rms_model_band(SEP, band='S') for SEP in SEP_values]
+    RMS_X_values = [fc.angle_rms_model_band(SEP, band='X') for SEP in SEP_values]
+    RMS_Ka_values = [fc.angle_rms_model_band(SEP, band='Ka') for SEP in SEP_values]  
     plt.figure(figsize=(10, 6))
-    plt.plot(SEP_values, variance_values)
-    plt.title("Variance angulaire en fonction de l'angle SEP")
+    plt.plot(SEP_values, RMS_S_values, label="Bande S") 
+    plt.plot(SEP_values, RMS_X_values, label="Bande X")
+    plt.plot(SEP_values, RMS_Ka_values, label="Bande Ka")
+    plt.title("Valeurs des fluctuations RMS en fonction de l'angle SEP") 
     plt.xlabel("Angle SEP (degrés)")
-    plt.ylabel("Variance angulaire (radians²)")
+    plt.ylabel("Valeurs RMS")
     plt.yscale('log')
+    plt.legend()
     plt.grid()
-    plt.show() 
-
-def plot_RMS():
-    SEP_values = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
-    variance_values = [np.rad2deg(1.414*np.sqrt(fc.angular_variance(SEP)))*10**3 for SEP in SEP_values]
-    plt.figure(figsize=(10, 6))
-    plt.plot(SEP_values, variance_values)
-    plt.title("Angle d'arrivée RMS en fonction de l'angle SEP")
-    plt.xlabel("Angle SEP (degrés)")
-    plt.ylabel("Angle d'arrivée (mdegrés)")
-    plt.yscale('log')
-    plt.grid()
-    plt.show() 
+    plt.show()
 
 def plot_spectre_phase():
-    f = [10**(-4), 10**(-3), 10**(-2), 10**(-1), 1]  # Fréquence en Hz
-    SEP = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
+    f = np.linspace(10**(-4), 1, 1000)  # Fréquence en Hz
+    SEP = [0.5, 1, 2, 3, 4]  # Angle SEP en degrés
     vent_p = 100e3  # Vitesse de propagation en m/s
-    W_phi_values1 = [fc.spectre_phase(f[0], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values2 = [fc.spectre_phase(f[1], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values3 = [fc.spectre_phase(f[2], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values4 = [fc.spectre_phase(f[3], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values5 = [fc.spectre_phase(f[4], SEP_angle, vent_p) for SEP_angle in SEP]
+    W_phi_values1 = [fc.spectre_phase(f_freq, SEP[0], vent_p) for f_freq in f]
+    W_phi_values2 = [fc.spectre_phase(f_freq, SEP[1], vent_p) for f_freq in f]
+    W_phi_values3 = [fc.spectre_phase(f_freq, SEP[2], vent_p) for f_freq in f]
+    W_phi_values4 = [fc.spectre_phase(f_freq, SEP[3], vent_p) for f_freq in f]
+    W_phi_values5 = [fc.spectre_phase(f_freq, SEP[4], vent_p) for f_freq in f]
     plt.figure(figsize=(10, 6))
-    plt.plot(SEP, W_phi_values1, label=f"f={f[0]:.1e} Hz")
-    plt.plot(SEP, W_phi_values2, label=f"f={f[1]:.1e} Hz")
-    plt.plot(SEP, W_phi_values3, label=f"f={f[2]:.1e} Hz")
-    plt.plot(SEP, W_phi_values4, label=f"f={f[3]:.1e} Hz")
-    plt.plot(SEP, W_phi_values5, label=f"f={f[4]:.1e} Hz")
-    plt.title("Spectre de phase en fonction de l'angle SEP")
-    plt.xlabel("Angle SEP (degrés)")
+    plt.plot(f, W_phi_values1, label=f"SEP={SEP[0]} °")
+    plt.plot(f, W_phi_values2, label=f"SEP={SEP[1]} °")
+    plt.plot(f, W_phi_values3, label=f"SEP={SEP[2]} °")
+    plt.plot(f, W_phi_values4, label=f"SEP={SEP[3]} °")
+    plt.plot(f, W_phi_values5, label=f"SEP={SEP[4]} °")
+    plt.title("Spectre de phase en fonction de la fréquence")
+    plt.xlabel("Fréquence (Hz)")
     plt.ylabel("Spectre de phase Wφ")
     plt.yscale('log')
     plt.legend()
@@ -280,23 +278,23 @@ def plot_spectre_phase():
     plt.show()
 
 def plot_spectre_doppler():
-    f = [10**(-4), 10**(-3), 10**(-2), 10**(-1), 1]  # Fréquence en Hz
-    SEP = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
+    f = np.linspace(10**(-4), 1, 1000)  # Fréquence en Hz
+    k = 2*np.pi*f/c.c  # Vecteur d'onde en rad/m
+    SEP = [0.5, 1, 2, 3, 4]  # Angle SEP en degrés
     vent_p = 100e3  # Vitesse de propagation en m/s
-    W_phi_values1 = [fc.spectre_doppler(f[0], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values2 = [fc.spectre_doppler(f[1], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values3 = [fc.spectre_doppler(f[2], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values4 = [fc.spectre_doppler(f[3], SEP_angle, vent_p) for SEP_angle in SEP]
-    W_phi_values5 = [fc.spectre_doppler(f[4], SEP_angle, vent_p) for SEP_angle in SEP]
-
+    W_phi_values1 = [fc.spectre_doppler(f_freq, SEP[0], vent_p) for f_freq in f]
+    W_phi_values2 = [fc.spectre_doppler(f_freq, SEP[1], vent_p) for f_freq in f]
+    W_phi_values3 = [fc.spectre_doppler(f_freq, SEP[2], vent_p) for f_freq in f]
+    W_phi_values4 = [fc.spectre_doppler(f_freq, SEP[3], vent_p) for f_freq in f]
+    W_phi_values5 = [fc.spectre_doppler(f_freq, SEP[4], vent_p) for f_freq in f]
     plt.figure(figsize=(10, 6))
-    plt.plot(SEP, W_phi_values1, label=f"f={f[0]:.1e} Hz")
-    plt.plot(SEP, W_phi_values2, label=f"f={f[1]:.1e} Hz")
-    plt.plot(SEP, W_phi_values3, label=f"f={f[2]:.1e} Hz")
-    plt.plot(SEP, W_phi_values4, label=f"f={f[3]:.1e} Hz")
-    plt.plot(SEP, W_phi_values5, label=f"f={f[4]:.1e} Hz")
-    plt.title("Spectre Doppler en fonction de l'angle SEP")
-    plt.xlabel("Angle SEP (degrés)")
+    plt.plot(k, W_phi_values1, label=f"SEP={SEP[0]:.1e} °")
+    plt.plot(k, W_phi_values2, label=f"SEP={SEP[1]:.1e} °")
+    plt.plot(k, W_phi_values3, label=f"SEP={SEP[2]:.1e} °")
+    plt.plot(k, W_phi_values4, label=f"SEP={SEP[3]:.1e} °")
+    plt.plot(k, W_phi_values5, label=f"SEP={SEP[4]:.1e} °")
+    plt.title("Spectre Doppler en fonction de la fréquence")
+    plt.xlabel("Fréquence (Hz)")
     plt.ylabel("Spectre Doppler $W_{f_D}$")
     plt.yscale('log')
     plt.legend()
@@ -307,9 +305,7 @@ def plot_serie_temporelle_doppler():
     seed = 0
     SEP_list = [0.5, 1, 2, 3, 4]
     vent_p = 100e3
-    Cnorm = 1e-33
     fs = 200
-    T = 200
 
     # PSD sur une grille dense
     f_fluct = np.logspace(-4, 1, 600)        # Hz
@@ -322,11 +318,11 @@ def plot_serie_temporelle_doppler():
         Wfd_om_pos = np.nan_to_num(Wfd_om_pos, nan=0.0, posinf=0.0, neginf=0.0)
         Wfd_om_pos = np.maximum(Wfd_om_pos, 0.0)
 
-        t, fD = fc.serie_temp_doppler(seed+i, omega_pos, Wfd_om_pos, fs=fs, T=T)
+        t, fD = fc.serie_temp_doppler(seed+i, omega_pos, Wfd_om_pos, fs=fs)
 
         # Affiche juste 30 s pour lisibilité
         nwin = 30*fs
-        plt.plot(t[:nwin], Cnorm*fD[:nwin], label=f"SEP={SEP}°")
+        plt.plot(t[:nwin], fD[:nwin], label=f"SEP={SEP}°")
 
     plt.title("Série temporelle Doppler $f_D(t)$ pour différents SEP")
     plt.xlabel("Temps (s)")
@@ -334,4 +330,131 @@ def plot_serie_temporelle_doppler():
     plt.legend()
     plt.grid()
     plt.show()
-          
+
+def plot_serie_temp_2():
+    seed = 0
+    SEP = 2.68 #degré
+    vent_p = 100e3
+    fs = 200
+    f_fluct = np.logspace(-4, 1, 600)        # Hz
+    omega_pos = 2*np.pi*f_fluct              # rad/s
+    Wfd_om_pos = np.array([fc.spectre_doppler(ff, SEP, vent_p) for ff in f_fluct], float)
+    Wfd_om_pos = np.nan_to_num(Wfd_om_pos, nan=0.0, posinf=0.0, neginf=0.0)
+    Wfd_om_pos = np.maximum(Wfd_om_pos, 0.0)
+
+    t, fD = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos, fs=fs)
+
+    # Affiche juste 30 s pour lisibilité
+    nwin = 20000*fs
+    plt.plot(t[:nwin], fD[:nwin], label=f"SEP={SEP}°")
+    plt.title("Série temporelle Doppler $f_D(t)$ pour un SEP de 2.68°")
+    plt.xlabel("Temps (s)")
+    plt.ylabel("$f_D(t)$ (Hz)")
+    plt.grid()
+    plt.show()
+
+def plot_serie_temp_3():
+    seed = 0
+    SEP = 1.247 #degré
+    vent_p = 100e3
+    fs = 200
+    T = 200
+    f_fluct = np.logspace(-4, 1, 600)        # Hz
+    omega_pos = 2*np.pi*f_fluct              # rad/s
+    Wfd_om_pos = np.array([fc.spectre_doppler(ff, SEP, vent_p) for ff in f_fluct], float)
+    Wfd_om_pos = np.nan_to_num(Wfd_om_pos, nan=0.0, posinf=0.0, neginf=0.0)
+    Wfd_om_pos = np.maximum(Wfd_om_pos, 0.0)
+
+    t, fD = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos, fs=fs, T=T)
+
+    # Affiche juste 30 s pour lisibilité
+    nwin = 2000*fs
+    plt.plot(t[:nwin], fD[:nwin], label=f"SEP={SEP}°")
+    plt.title("Série temporelle Doppler $f_D(t)$ pour un SEP de 1.247°")
+    plt.xlabel("Temps (s)")
+    plt.ylabel("$f_D(t)$ (Hz)")
+    plt.grid()
+    plt.show()
+
+def plot_reconstruction_phase_deg():
+    seed = 0
+    SEP = 2.68 #degré
+    vent_p = 100e3
+    fs = 200
+    T = 200
+    f_fluct = np.logspace(-4, 1, 600)        # Hz
+    omega_pos = 2*np.pi*f_fluct              # rad/s
+    Wfd_om_pos = np.array([fc.spectre_doppler(ff, SEP, vent_p) for ff in f_fluct], float)
+    Wfd_om_pos = np.nan_to_num(Wfd_om_pos, nan=0.0, posinf=0.0, neginf=0.0)
+    Wfd_om_pos = np.maximum(Wfd_om_pos, 0.0)
+
+    t, fD = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos, fs=fs, T=T)
+    phase_values = fc.reconstruction_phase_deg(fD, fs=200, remove_dc=True, phi0_deg=0.0)
+    nwin = 2000*fs
+    plt.figure(figsize=(10, 6))
+    plt.plot(t[:nwin], phase_values[:nwin], label=f"SEP={SEP}°")
+    plt.title("Phase reconstruite $\\phi(t)$ pour un SEP de 2.68°")
+    plt.xlabel("Temps (s)")
+    plt.ylabel("$\\phi(t)$ (degrés)")
+    plt.grid()
+    plt.show()
+
+def plot_reconstruction_phase_deg_diff_SEP():
+    seed = 0
+    SEP_list = [0.5, 1, 2, 3, 4]
+    vent_p = 100e3
+    fs = 200
+    T = 200
+    f_fluct = np.logspace(-4, 1, 600)        # Hz
+    omega_pos = 2*np.pi*f_fluct              # rad/s
+    Wfd_om_pos1 = np.array([fc.spectre_doppler(ff, SEP_list[0], vent_p) for ff in f_fluct], float)
+    Wfd_om_pos2 = np.array([fc.spectre_doppler(ff, SEP_list[1], vent_p) for ff in f_fluct], float)
+    Wfd_om_pos3 = np.array([fc.spectre_doppler(ff, SEP_list[2], vent_p) for ff in f_fluct], float)
+    Wfd_om_pos4 = np.array([fc.spectre_doppler(ff, SEP_list[3], vent_p) for ff in f_fluct], float)
+    Wfd_om_pos5 = np.array([fc.spectre_doppler(ff, SEP_list[4], vent_p) for ff in f_fluct], float)
+
+    t, fD1 = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos1, fs=fs, T=T)
+    t, fD2 = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos2, fs=fs, T=T)
+    t, fD3 = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos3, fs=fs, T=T)
+    t, fD4 = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos4, fs=fs, T=T)
+    t, fD5 = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos5, fs=fs, T=T)
+
+    phase_values1 = fc.reconstruction_phase_deg(fD1, fs=200, remove_dc=True, phi0_deg=0.0)
+    phase_values2 = fc.reconstruction_phase_deg(fD2, fs=200, remove_dc=True, phi0_deg=0.0)
+    phase_values3 = fc.reconstruction_phase_deg(fD3, fs=200, remove_dc=True, phi0_deg=0.0)
+    phase_values4 = fc.reconstruction_phase_deg(fD4, fs=200, remove_dc=True, phi0_deg=0.0)
+    phase_values5 = fc.reconstruction_phase_deg(fD5, fs=200, remove_dc=True, phi0_deg=0.0)
+    nwin = 2000*fs
+    plt.figure(figsize=(10, 6))
+    plt.plot(t[:nwin], phase_values1[:nwin], label=f"SEP={SEP_list[0]}°")
+    plt.plot(t[:nwin], phase_values2[:nwin], label=f"SEP={SEP_list[1]}°")
+    plt.plot(t[:nwin], phase_values3[:nwin], label=f"SEP={SEP_list[2]}°")
+    plt.plot(t[:nwin], phase_values4[:nwin], label=f"SEP={SEP_list[3]}°")
+    plt.plot(t[:nwin], phase_values5[:nwin], label=f"SEP={SEP_list[4]}°")
+    plt.title("Phase reconstruite $\\phi(t)$ pour différents SEP")
+    plt.xlabel("Temps (s)")
+    plt.ylabel("$\\phi(t)$ (degrés)")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+def plot_bilan_liaison():
+    SEP = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
+    Latm = 2  # Atténuation atmosphérique en dB
+    Liono = 5  # Atténuation ionosphérique en dB
+    Lpoint = 3  # Pertes de pointage en dB
+    Lpol = 1  # Pertes de polarisation en dB
+    f_psd = 200  # Fréquence pour le PSD en Hz
+    P_t = 20  # Puissance transmise en dBm
+    G_t = 30  # Gain de l'antenne émettrice en dBi
+    G_r = 40  # Gain de l'antenne réceptrice en dBi
+
+    bilan_values = [fc.Bilan_liaison(SEP_angle, Latm, Liono, Lpoint, Lpol, f_psd, P_t, G_t, G_r) for SEP_angle in SEP]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(SEP, bilan_values)
+    plt.title("Bilan de liaison en fonction de l'angle SEP")
+    plt.xlabel("Angle SEP (degrés)")
+    plt.ylabel("Bilan de liaison (dBm)")
+    plt.grid()
+    plt.show()
