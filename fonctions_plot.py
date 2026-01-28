@@ -18,9 +18,24 @@ def plot_distance_terre_venus():
     distances = fc.distance_terre_venus(angle_terre, angle_venus)
     
     plt.figure(figsize=(10, 6))
-    plt.plot(jours, distances / 1e6)  # Convertir km en millions de km pour l'affichage
+    plt.plot(jours, distances * 1e-9)  # Convertir km en millions de km pour l'affichage
     plt.title("Distance entre la Terre et Vénus au cours d'une année")
     plt.xlabel("Jours")
+    plt.ylabel("Distance (millions de km)")
+    plt.grid()
+    plt.show()
+
+def plot_distance_SEP():
+    """
+    Trace la distance entre la Terre et Vénus en fonction de l'angle SEP.
+    """
+    SEP = np.linspace(0, 5, 1000)  # Angle SEP en degrés
+    distances = fc.SEP_dist(SEP)
+    
+    plt.figure(figsize=(10, 6))
+    plt.plot(SEP, distances * 1e-9)  # Convertir km en millions de km pour l'affichage
+    plt.title("Distance entre la Terre et Vénus en fonction de l'angle SEP")
+    plt.xlabel("Angle SEP (degrés)")
     plt.ylabel("Distance (millions de km)")
     plt.grid()
     plt.show()
@@ -191,20 +206,21 @@ def plot_I3():
     """
     Trace de l'intégrale I3 en fonction de la distance r.
     """
-    r = np.linspace(c.R_soleil, 4 * c.R_soleil, 1000)  # De la surface du Soleil à 4 rayons solaires
+    SEP = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
+    r = fc.SEP_dist(SEP)
     Vs = [100e3, 150e3, 200e3, 250e3, 300e3]  # Vitesse radiale en m/sc
-    I3_values_0 = [fc.I3(Vs[0], radius) for radius in r]
-    I3_values_1 = [fc.I3(Vs[1], radius) for radius in r]
-    I3_values_2 = [fc.I3(Vs[2], radius) for radius in r]
-    I3_values_3 = [fc.I3(Vs[3], radius) for radius in r]
-    I3_values_4 = [fc.I3(Vs[4], radius) for radius in r]
+    I3_values_0 = [fc.I3(Vs[0], radius) for radius in SEP]
+    I3_values_1 = [fc.I3(Vs[1], radius) for radius in SEP]
+    I3_values_2 = [fc.I3(Vs[2], radius) for radius in SEP]
+    I3_values_3 = [fc.I3(Vs[3], radius) for radius in SEP]
+    I3_values_4 = [fc.I3(Vs[4], radius) for radius in SEP]
 
     plt.figure(figsize=(10, 6))
-    plt.plot(r / c.R_soleil, I3_values_0, label=f"Vs={Vs[0]/1e3} km/s")
-    plt.plot(r / c.R_soleil, I3_values_1, label=f"Vs={Vs[1]/1e3} km/s")
-    plt.plot(r / c.R_soleil, I3_values_2, label=f"Vs={Vs[2]/1e3} km/s")
-    plt.plot(r / c.R_soleil, I3_values_3, label=f"Vs={Vs[3]/1e3} km/s")
-    plt.plot(r / c.R_soleil, I3_values_4, label=f"Vs={Vs[4]/1e3} km/s")
+    plt.plot(r, I3_values_0, label=f"Vs={Vs[0]/1e3} km/s")
+    plt.plot(r, I3_values_1, label=f"Vs={Vs[1]/1e3} km/s")
+    plt.plot(r, I3_values_2, label=f"Vs={Vs[2]/1e3} km/s")
+    plt.plot(r, I3_values_3, label=f"Vs={Vs[3]/1e3} km/s")
+    plt.plot(r, I3_values_4, label=f"Vs={Vs[4]/1e3} km/s")
     plt.legend()    
     plt.title("Intégrale I3 en fonction de la distance r")
     plt.xlabel("Distance r (rayons solaires)")
@@ -256,6 +272,7 @@ def plot_RMS():
 
 def plot_spectre_phase():
     f = np.linspace(10**(-4), 1, 1000)  # Fréquence en Hz
+    k = 2*np.pi*f/c.c  # Vecteur d'onde en rad/m
     SEP = [0.5, 1, 2, 3, 4]  # Angle SEP en degrés
     vent_p = 100e3  # Vitesse de propagation en m/s
     W_phi_values1 = [fc.spectre_phase(f_freq, SEP[0], vent_p) for f_freq in f]
@@ -264,13 +281,13 @@ def plot_spectre_phase():
     W_phi_values4 = [fc.spectre_phase(f_freq, SEP[3], vent_p) for f_freq in f]
     W_phi_values5 = [fc.spectre_phase(f_freq, SEP[4], vent_p) for f_freq in f]
     plt.figure(figsize=(10, 6))
-    plt.plot(f, W_phi_values1, label=f"SEP={SEP[0]} °")
-    plt.plot(f, W_phi_values2, label=f"SEP={SEP[1]} °")
-    plt.plot(f, W_phi_values3, label=f"SEP={SEP[2]} °")
-    plt.plot(f, W_phi_values4, label=f"SEP={SEP[3]} °")
-    plt.plot(f, W_phi_values5, label=f"SEP={SEP[4]} °")
-    plt.title("Spectre de phase en fonction de la fréquence")
-    plt.xlabel("Fréquence (Hz)")
+    plt.plot(k, W_phi_values1, label=f"SEP={SEP[0]} °")
+    plt.plot(k, W_phi_values2, label=f"SEP={SEP[1]} °")
+    plt.plot(k, W_phi_values3, label=f"SEP={SEP[2]} °")
+    plt.plot(k, W_phi_values4, label=f"SEP={SEP[3]} °")
+    plt.plot(k, W_phi_values5, label=f"SEP={SEP[4]} °")
+    plt.title("Spectre de phase en fonction du nombre d'onde k")
+    plt.xlabel("Nombre d'onde k")
     plt.ylabel("Spectre de phase Wφ")
     plt.yscale('log')
     plt.legend()
@@ -293,8 +310,8 @@ def plot_spectre_doppler():
     plt.plot(k, W_phi_values3, label=f"SEP={SEP[2]:.1e} °")
     plt.plot(k, W_phi_values4, label=f"SEP={SEP[3]:.1e} °")
     plt.plot(k, W_phi_values5, label=f"SEP={SEP[4]:.1e} °")
-    plt.title("Spectre Doppler en fonction de la fréquence")
-    plt.xlabel("Fréquence (Hz)")
+    plt.title("Spectre Doppler en fonction du nombre d'onde k")
+    plt.xlabel("Nombre d'onde k")
     plt.ylabel("Spectre Doppler $W_{f_D}$")
     plt.yscale('log')
     plt.legend()
@@ -345,7 +362,7 @@ def plot_serie_temp_2():
     t, fD = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos, fs=fs)
 
     # Affiche juste 30 s pour lisibilité
-    nwin = 20000*fs
+    nwin = 30*fs
     plt.plot(t[:nwin], fD[:nwin], label=f"SEP={SEP}°")
     plt.title("Série temporelle Doppler $f_D(t)$ pour un SEP de 2.68°")
     plt.xlabel("Temps (s)")
@@ -368,7 +385,7 @@ def plot_serie_temp_3():
     t, fD = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos, fs=fs, T=T)
 
     # Affiche juste 30 s pour lisibilité
-    nwin = 2000*fs
+    nwin = 30*fs
     plt.plot(t[:nwin], fD[:nwin], label=f"SEP={SEP}°")
     plt.title("Série temporelle Doppler $f_D(t)$ pour un SEP de 1.247°")
     plt.xlabel("Temps (s)")
@@ -390,7 +407,7 @@ def plot_reconstruction_phase_deg():
 
     t, fD = fc.serie_temp_doppler(seed, omega_pos, Wfd_om_pos, fs=fs, T=T)
     phase_values = fc.reconstruction_phase_deg(fD, fs=200, remove_dc=True, phi0_deg=0.0)
-    nwin = 2000*fs
+    nwin = 30*fs
     plt.figure(figsize=(10, 6))
     plt.plot(t[:nwin], phase_values[:nwin], label=f"SEP={SEP}°")
     plt.title("Phase reconstruite $\\phi(t)$ pour un SEP de 2.68°")
@@ -424,7 +441,7 @@ def plot_reconstruction_phase_deg_diff_SEP():
     phase_values3 = fc.reconstruction_phase_deg(fD3, fs=200, remove_dc=True, phi0_deg=0.0)
     phase_values4 = fc.reconstruction_phase_deg(fD4, fs=200, remove_dc=True, phi0_deg=0.0)
     phase_values5 = fc.reconstruction_phase_deg(fD5, fs=200, remove_dc=True, phi0_deg=0.0)
-    nwin = 2000*fs
+    nwin = 30*fs
     plt.figure(figsize=(10, 6))
     plt.plot(t[:nwin], phase_values1[:nwin], label=f"SEP={SEP_list[0]}°")
     plt.plot(t[:nwin], phase_values2[:nwin], label=f"SEP={SEP_list[1]}°")
@@ -445,7 +462,7 @@ def plot_bilan_liaison():
     Lpoint = 3  # Pertes de pointage en dB
     Lpol = 1  # Pertes de polarisation en dB
     f_psd = 200  # Fréquence pour le PSD en Hz
-    P_t = 20  # Puissance transmise en dBm
+    P_t = 29  # Puissance transmise en dB
     G_t = 30  # Gain de l'antenne émettrice en dBi
     G_r = 40  # Gain de l'antenne réceptrice en dBi
 
@@ -455,6 +472,8 @@ def plot_bilan_liaison():
     plt.plot(SEP, bilan_values)
     plt.title("Bilan de liaison en fonction de l'angle SEP")
     plt.xlabel("Angle SEP (degrés)")
-    plt.ylabel("Bilan de liaison (dBm)")
+    plt.ylabel("Bilan de liaison (dB)")
     plt.grid()
     plt.show()
+
+    

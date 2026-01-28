@@ -107,43 +107,15 @@ def I2 (SEP):
                                       + (63 * np.sin(SEP)**5 * np.cos(SEP))/480 + (315 * np.sin(SEP)**3 *np.cos(SEP))/1920 \
                                         + (945 * np.sin(SEP) * np.cos(SEP))/3840 + (945 * (np.pi/2 - SEP))/3840)
     
-def I3 (Vs, r):
+def I3 (Vs, SEP):
     """
     Calcul de l'intégrale I3 pour la variance angulaire.
     Vs = vitesse radiale du vent solaire en m/s
     r = distance au soleil en mètres
     """
+    r = SEP_dist(SEP)
     gam_rad = np.arctan(-Vs/(c.omega*r))
     return np.pi/2 * (2 + (c.Axial_r**2 - 1) * np.sin(gam_rad)**2)/(1 + (c.Axial_r**2 -1) * np.sin(gam_rad)**2)**(2/3)
-
-def angle_rms_table(SEP_deg, band="X", out="mdeg"):
-    """
-    Angle d'arrivée RMS interpolé à partir de la Table 2 (Ho et al. 2008).
-    
-    SEP_deg : float ou array
-    band : "S", "X", "Ka"
-    out : "deg" | "mdeg" | "rad"
-    """
-    band = band.strip()
-    key = {"S": "S_deg", "X": "X_deg", "Ka": "Ka_deg"}[band]
-    
-    x = c._TABLE2["SEP_deg"]
-    y_deg = c._TABLE2[key]
-
-    SEP = np.asarray(SEP_deg, dtype=float)
-
-    # Interpolation en log (souvent plus stable car variations sur plusieurs ordres de grandeur)
-    # On interpole log10(y) en fonction de SEP, puis on revient en linéaire.
-    logy = np.log10(y_deg)
-    y_interp_deg = 10 ** np.interp(SEP, x, logy, left=np.nan, right=np.nan)
-
-    if out == "deg":
-        return y_interp_deg
-    if out == "mdeg":
-        return 1e3 * y_interp_deg
-    if out == "rad":
-        return np.deg2rad(y_interp_deg)
-    raise ValueError("out doit être 'deg', 'mdeg' ou 'rad'")
 
 
 def angular_variance_band(SEP_deg, band="X", C_norm=1.0):
@@ -151,15 +123,14 @@ def angular_variance_band(SEP_deg, band="X", C_norm=1.0):
     Variante de angular_variance() où lambda dépend de la bande (S/X/Ka).
     Nécessite I1, I2, I3, SEP_dist déjà définies dans ton projet.
     """
-    C_norm=1.e27 # Ajustement de la normalisation pour correspondre aux données expérimentales
+    C_norm=1 # Ajustement de la normalisation pour correspondre aux données expérimentales
     band = band.strip()
     f = c.FREQ[band]                 # Hz
     lamb_band = c.c / f              # m  (ici c = vitesse lumière dans ton module constantes)
 
     valI1 = I1(3.9, c.ar)            # si tu veux utiliser nu/ar du module : I1(nu, ar)
     valI2 = I2(SEP_deg)
-    r = SEP_dist(SEP_deg)
-    valI3 = I3(200e3, r)
+    valI3 = I3(200e3, SEP_deg)
 
     return 0.5 * C_norm * c.re**2 * lamb_band**4 * c.Q_nu * c.kappa_0**(c.nu - 3) * valI1 * valI2 * valI3
 
@@ -196,8 +167,10 @@ def spectre_phase(f, SEP, vent_p = 100e3):
     vent_p : vitesse du vent solaire en m/s
     """
     IntA = intA(SEP)
-    omega = 2 * np.pi * f
+    k = 2 * np.pi * f / c.c
+    omega = k * c.c
     omega_s = vent_p/(c.b* c.ar) 
+
     W_phi = 4*np.pi**4*c.re**2 * c.lamb**2* vent_p**(13/12) * omega **(-25/12) * np.exp(-omega**2/omega_s**2)*gamma(1/2)*hyperu(1/2,-1/24,omega**2/omega_s**2) * IntA
     return W_phi
 
@@ -208,7 +181,8 @@ def spectre_doppler(f, SEP, vent_p = 100e3):
     SEP : angle sun earth probe en degrés
     vent_p : vitesse du vent solaire en m/s
     """
-    omega = 2 * np.pi * f
+    k = 2 * np.pi * f / c.c
+    omega = k * c.c
     W_phi = spectre_phase(f, SEP, vent_p)
     return omega**2/(2*np.pi)**2*W_phi
 
@@ -274,7 +248,7 @@ def Bilan_liaison(SEP, Latm, Liono, Lpoint, Lpol,f_psd, P_t, G_t, G_r, vent_p = 
     G_r : gain de l'antenne réceptrice en dBi fixée à 35 dBi
     vent_p : vitesse du vent solaire en m/s
     """
-    distance = SEP_dist(SEP)
+    distance = np.sqrt(c.D_terre**2 + c.D_venus**2 - 2*c.D_terre*c.D_venus*np.cos(np.radians(SEP)))
     L_fs = 20 * np.log10((4 * np.pi * distance * 1e3) / c.lamb)  # Conversion km à m
     Ltot = L_fs + Latm + Liono + Lpoint + Lpol 
     return P_t + G_t + G_r - Ltot
