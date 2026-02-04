@@ -349,6 +349,9 @@ def plot_serie_temporelle_doppler():
     plt.show()
 
 def plot_serie_temp_2():
+    """
+    Trace la série temporelle Doppler $f_D(t)$ pour un SEP de 2.68°.
+    """
     seed = 0
     SEP = 2.68 #degré
     vent_p = 100e3
@@ -371,6 +374,9 @@ def plot_serie_temp_2():
     plt.show()
 
 def plot_serie_temp_3():
+    """
+    Trace la série temporelle Doppler $f_D(t)$ pour un SEP de 1.247°.
+    """
     seed = 0
     SEP = 1.247 #degré
     vent_p = 100e3
@@ -394,6 +400,9 @@ def plot_serie_temp_3():
     plt.show()
 
 def plot_reconstruction_phase_deg():
+    """ 
+    Trace la phase reconstruite $\\phi(t)$ pour un SEP de 2.68°.
+    """
     seed = 0
     SEP = 2.68 #degré
     vent_p = 100e3
@@ -417,6 +426,9 @@ def plot_reconstruction_phase_deg():
     plt.show()
 
 def plot_reconstruction_phase_deg_diff_SEP():
+    """
+    Trace la phase reconstruite $\\phi(t)$ pour différents angles SEP.
+    """
     seed = 0
     SEP_list = [0.5, 1, 2, 3, 4]
     vent_p = 100e3
@@ -456,6 +468,9 @@ def plot_reconstruction_phase_deg_diff_SEP():
     plt.show()
 
 def plot_bilan_liaison():
+    """
+    Trace le bilan de liaison en fonction de l'angle SEP pour des paramètres donnés.
+    """
     SEP = np.linspace(0.1, 5, 1000)  # Angle SEP en degrés
     Latm = 2  # Atténuation atmosphérique en dB
     Liono = 5  # Atténuation ionosphérique en dB

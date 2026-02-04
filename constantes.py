@@ -7,25 +7,25 @@ R_soleil = 696340e3  # Rayon du Soleil en m
 Cn2 = 1e-12        # structure constant Cn²
 Los = 100     # outer scale (m)
 Lis = 0.01         # inner scale (m)
-c = 3e8
-f = 10e9
-lamb = c/f
-k0  = 2*np.pi/lamb 
+c = 3e8 # vitesse de la lumière en m/s
+f = 10e9 # fréquence en Hz (exemple pour 10 GHz) Bande X
+lamb = c/f # longueur d'onde en m
+k0  = 2*np.pi/lamb # nombre d'ondes
 
 # dérivés
-Kos = 2*np.pi / Los
-km  = 5.92 / Lis
+Kos = 2*np.pi / Los # nombre d'ondes associé à l'échelle extérieure
+km  = 5.92 / Lis # nombre d'ondes associé à l'échelle intérieure
 
 kb = 1.38e-23  # constante de Boltzmann en J/K
-epsil = 0.5
+epsil = 0.5 # facteur d'efficacité de l'antenne (exemple, à ajuster selon ton cas)
 epsil_0 = 8.854e-12  # permittivité du vide en F/m
 re = 2.818e-15      # rayon classique de l'électron (m)
 
 L0 = 2e7  # échelle extérieure de turbulence en mètres
-kappa_0 = 2*np.pi / L0
+kappa_0 = 2*np.pi / L0 # nombre d'ondes associé à l'échelle extérieure
 
-Axial_r = 35
-Q_nu = 2 * Axial_r/np.pi
+Axial_r = 35 # rayon de l'antenne en mètres (exemple, à ajuster selon ton cas)
+Q_nu = 2 * Axial_r/np.pi # facteur de forme pour une antenne circulaire (Airy disk)
 nu = 3.9 #indice spectral de la turbulence
 a0 = 8.75e74 # coefficient d'irrégularité
 ar = 35 # rayon de l'antenne

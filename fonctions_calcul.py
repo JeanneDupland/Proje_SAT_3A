@@ -43,10 +43,20 @@ def densite_elec(r):
     return 2.21e14/(r/rs)**6 + 1.55e14/(r/rs)**2.3
 
 def S2D_vonKarman(kx, kz):
+    """
+    Calcul du spectre de turbulence 2D de von Karman.
+    kx, kz : composantes du vecteur d'ondes en m⁻¹
+    """
     k_perp2 = kx**2 + kz**2
     return 0.055 * c.Cn2 * (k_perp2 + c.Kos**2)**(-4/3)
 
 def F_filter(kx, kz, xR):
+    """
+    fonction de filtrage pour la variance de log-amplitude.
+    kx, kz : composantes du vecteur d'ondes en m⁻¹
+    xR : distance de propagation en mètres
+    Expression codée du début de papier de Ho, pas utile pour le projet mais laissée pour référence.
+    """
     k_perp2 = kx**2 + kz**2
     def integrand(u):
         return 1 - np.cos(xR * u * (1 - u) * k_perp2 / c.k0**2)
@@ -120,8 +130,10 @@ def I3 (Vs, SEP):
 
 def angular_variance_band(SEP_deg, band="X", C_norm=1.0):
     """
-    Variante de angular_variance() où lambda dépend de la bande (S/X/Ka).
-    Nécessite I1, I2, I3, SEP_dist déjà définies dans ton projet.
+    Calcul de la variance angulaire pour une bande de fréquence donnée.
+    SEP_deg : angle sun earth probe en degrés
+    band : bande de fréquence ("S", "X", "Ka")
+    C_norm : facteur de normalisation pour ajuster les résultats aux données expérimentales
     """
     C_norm=1 # Ajustement de la normalisation pour correspondre aux données expérimentales
     band = band.strip()
@@ -138,7 +150,10 @@ def angular_variance_band(SEP_deg, band="X", C_norm=1.0):
 
 def angle_rms_model_band(SEP_deg, band="X", C_norm=1.0):
     """
-    RMS angle d'arrivée depuis le modèle, avec fréquence dépendant de la bande.
+    Fluctuations angulaires RMS en millidegrés pour une bande de fréquence donnée.
+    SEP_deg : angle sun earth probe en degrés
+    band : bande de fréquence ("S", "X", "Ka")
+    C_norm : facteur de normalisation pour ajuster les résultats aux données expérimentales
     """
     dq2_u = angular_variance_band(SEP_deg, band=band, C_norm=C_norm)
     dq_rms_rad = 1.414 * np.sqrt(dq2_u)
